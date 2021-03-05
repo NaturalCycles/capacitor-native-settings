@@ -17,4 +17,18 @@ class NativeSettings : Plugin() {
         context.startActivity(intent)
         call.success()
     }
+
+    @PluginMethod
+    fun openNotificationSettings(call: PluginCall) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+
+            context.startActivity(intent)
+            call.success()
+        } else {
+            open(call)
+        }
+    }
 }
