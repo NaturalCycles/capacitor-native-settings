@@ -1,9 +1,12 @@
 package com.naturalcycles.nativesettings
 
+import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import com.getcapacitor.*
+
+private const val REQUEST_ENABLE_BLUETOOTH = 123
 
 @NativePlugin
 class NativeSettings : Plugin() {
@@ -27,6 +30,15 @@ class NativeSettings : Plugin() {
     } else {
       open(call)
     }
+  }
+
+  @PluginMethod
+  fun enableBluetooth(call: PluginCall) {
+    val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    activity.startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH)
+
+    call.success()
   }
 
   fun openInAppSettings() {
